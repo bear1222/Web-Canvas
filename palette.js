@@ -72,7 +72,7 @@ canvas_right.addEventListener('click', (e) => {
     show_palette_main(rgbToHex(color.r, color.g, color.b));
 });
 
-let selectredColor = '#FFF';
+let selectredColor = '#000';
 canvas_main.addEventListener('click', (e) => {
     const x = e.offsetX;
     const y = e.offsetY;
