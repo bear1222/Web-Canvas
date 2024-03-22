@@ -1,6 +1,9 @@
 let canvas = document.getElementById('paper');
-console.log(canvas);
+//console.log(canvas);
 let ctx = canvas.getContext('2d');
+let thicknessSelector = document.getElementById('thickness');
+let colorSelector = document.getElementById('color');
+let selectedMode = "brush";
 
 
 canvas.height = window.innerHeight;
@@ -13,13 +16,17 @@ canvas.addEventListener('mousemove', (e) => {
 });
 
 
-let brush = () => {
+brush = () => {
+    ctx.globalCompositeOperation = "source-over";
     canvas.addEventListener('mousedown', () => {
+        ctx.lineWidth = thicknessSelector.value;
+        const color = getColor();
+        ctx.strokeStyle = color;
+        console.log(color, ctx.lineWidth);
         ctx.beginPath();
         ctx.moveTo(cursor.x, cursor.y);
 
         canvas.addEventListener('mousemove', Painting);
-        console.log(cursor);
     });
 
     canvas.addEventListener('mouseup', () => {
@@ -32,10 +39,36 @@ let brush = () => {
     };
 }
 
-////////
-mode = 1;
-if(mode === 1){
-    brush();
-}else{
-    console.log("hi");
+erase = () => {
+    ctx.globalCompositeOperation = "destination-out";
+    canvas.addEventListener('mousedown', () => {
+        ctx.lineWidth = thicknessSelector.value;
+        ctx.beginPath();
+        ctx.moveTo(cursor.x, cursor.y);
+
+        canvas.addEventListener('mousemove', Erasing);
+    });
+
+    canvas.addEventListener('mouseup', () => {
+        canvas.removeEventListener('mousemove', Erasing);
+    });
+
+    Erasing = () => {
+        ctx.lineTo(cursor.x, cursor.y);
+        ctx.stroke();
+    };
 }
+
+////////
+$(document).ready(() =>{
+    brush();
+});
+selectMode = (mode) => {
+    console.log(mode);
+    selectedMode = mode;
+    if(selectedMode === "brush"){
+        brush();
+    }else if(selectedMode === "erase"){
+        erase();
+    }
+};
