@@ -9,11 +9,11 @@
 | Basic control tools                              | 30%       | Y         |
 | Text input                                       | 10%       | N         |
 | Cursor icon                                      | 10%       | N         |
-| Refresh button                                   | 5%        | N         |
+| Refresh button                                   | 5%        | Y         |
 
 | **Advanced tools**                               | **Score** | **Check** |
 | :----------------------------------------------- | :-------: | :-------: |
-| Different brush shapes                           | 15%       | N         |
+| Different brush shapes                           | 15%       | 2/3         |
 | Un/Re-do button                                  | 10%       | N         |
 | Image tool                                       | 5%        | N         |
 | Download                                         | 5%        | N         |
