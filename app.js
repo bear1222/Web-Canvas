@@ -3,7 +3,7 @@ let canvas = document.getElementById('paper');
 let ctx = canvas.getContext('2d');
 let thicknessSelector = document.getElementById('thickness');
 let colorSelector = document.getElementById('color');
-let selectedMode = "brush";
+let selectedMode = "font";
 
 let savedCanvas = document.getElementById('savedpaper');
 let savedCtx = savedCanvas.getContext('2d');
@@ -147,6 +147,45 @@ createTriangle = {
     }
 };
 
+var hasInput = 0;
+font = {
+    start: function(){
+        if(hasInput) return;
+        ctx.globalCompositeOperation = "source-over";
+        const x = cursor.x;
+        const y = cursor.y;
+
+        let inputVal = "";
+        let inputField = document.createElement('input');
+        inputField.type = 'text';
+        inputField.style.position = 'absolute';
+        inputField.style.left = x + 'px';
+        inputField.style.top  = y + 'px';
+        inputField.onkeydown = (e) => {
+            const key = e.key;
+            console.log(key);
+            if(key === 'Enter'){
+                inputVal = inputField.value;
+                document.body.removeChild(inputField);
+                const font_family = document.getElementById('font-family').value;
+                const font_size = document.getElementById('font-size').value;
+                ctx.font = `${font_size}px ${font_family}`;
+                const color = getColor();
+                ctx.fillStyle = color;
+                ctx.fillText(inputVal, x, y);
+                hasInput = 0;
+            }
+        } 
+        document.body.appendChild(inputField);
+        setTimeout(() => inputField.focus(), 0);
+        // inputField.focus();
+        hasInput = 1;
+
+    },
+    end: function(){
+    }
+};
+
 canvas.addEventListener('mousedown', () => {
     const color = getColor();
     ctx.strokeStyle = color;
@@ -166,6 +205,12 @@ canvas.addEventListener('mousedown', () => {
         case 'circle':
             createCircle.start();
             break;
+        case 'triangle':
+            createTriangle.start();
+            break;
+        case 'font':
+            font.start();
+            break;
 
         default:
             console.log('selectedMode error');
@@ -184,6 +229,12 @@ canvas.addEventListener('mouseup', () => {
             break;
         case 'circle':
             createCircle.end();
+            break;
+        case 'triangle':
+            createTriangle.end();
+            break;
+        case 'font':
+            font.end();
             break;
 
         default:

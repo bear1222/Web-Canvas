@@ -7,7 +7,7 @@
 | **Basic components**                             | **Score** | **Check** |
 | :----------------------------------------------- | :-------: | :-------: |
 | Basic control tools                              | 30%       | Y         |
-| Text input                                       | 10%       | N         |
+| Text input                                       | 10%       | Y         |
 | Cursor icon                                      | 10%       | N         |
 | Refresh button                                   | 5%        | Y         |
 
@@ -51,4 +51,6 @@ table th{
 * eraser can erase everything?
 * can reset be undo?
 * can draw on image?
+* If change font-family/size after the input area create?
+* press reset after create input area
 
