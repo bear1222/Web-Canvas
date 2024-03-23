@@ -8,17 +8,24 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 <body>
-    <canvas id="paper" width="500px" height="500px"></canvas>
-    <button onclick="selectMode(this.id)" id="brush">brush</button>
-    <button onclick="selectMode(this.id)" id="erase">eraser</button>
-    <button onclick="selectMode(this.id)" id="rect">rect</button>
-    <button onclick="selectMode(this.id)" id="circle">Circle</button>
+    <div class="wrapper">
+        <canvas id="savedpaper" width="700px" height="700px"></canvas>
+        <canvas id="paper"      width="700px" height="700px"></canvas>
 
-    <input type="range" min="1" max="30" step="1" value="5" id="thickness">
-    <canvas id="palette-main" width="300px" height="300px"></canvas>
-    <canvas id="palette-right" width="50px" height="300px"></canvas>
+    </div>
+    <div>
+        <button onclick="selectMode(this.id)" id="brush">brush</button>
+        <button onclick="selectMode(this.id)" id="erase">eraser</button>
+        <button onclick="selectMode(this.id)" id="rect">rect</button>
+        <button onclick="selectMode(this.id)" id="circle">Circle</button>
 
-    <p id="color-test">Hi</p>
+        <input type="range" min="1" max="30" step="1" value="5" id="thickness">
+        <canvas id="palette-main" width="300px" height="300px"></canvas>
+        <canvas id="palette-right" width="50px" height="300px"></canvas>
+
+        <p id="color-test">Hi</p>
+
+    </div>
 
 
 

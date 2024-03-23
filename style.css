@@ -1,4 +1,11 @@
+#savedpaper, #paper{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
 
-canvas{
-    border-width: 5px;
+.wrapper{
+    position: relative;
+    height:700px;
+    width: 700px;
 }
