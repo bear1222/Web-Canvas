@@ -2,10 +2,11 @@
     position: absolute;
     top: 0px;
     left: 0px;
+    cursor: url('img/brush.png'), auto;
 }
 
 .wrapper{
     position: relative;
-    height:700px;
+    height:800px;
     width: 700px;
 }

@@ -3,7 +3,7 @@ let canvas = document.getElementById('paper');
 let ctx = canvas.getContext('2d');
 let thicknessSelector = document.getElementById('thickness');
 let colorSelector = document.getElementById('color');
-let selectedMode = "font";
+let selectedMode = "brush";
 
 let savedCanvas = document.getElementById('savedpaper');
 let savedCtx = savedCanvas.getContext('2d');
@@ -16,9 +16,13 @@ canvas.addEventListener('mousemove', (e) => {
 });
 
 ////////// not finish
-function makeRecord(type, record){ 
+function makeRecord(type, points, color, width, font_size, font_family){ 
     this.type = type;
-    this.record = record;
+    this.points = points;
+    this.color = color;
+    this.width = width;
+    this.font_size = font_size;
+    this.font_family = font_family;
 }
 
 var points = []; 
@@ -121,8 +125,6 @@ createTriangle = {
     start: function(){
         savedCtx.drawImage(canvas, 0, 0);
         ctx.globalCompositeOperation = "source-over";
-        ctx.beginPath();
-        ctx.moveTo(cursor.x, cursor.y);
         start.x = cursor.x;
         start.y = cursor.y;
         console.log("start:", start);
@@ -131,12 +133,16 @@ createTriangle = {
     move: function(){
         const nowx = cursor.x;
         const nowy = cursor.y;
-        const x = (nowx + start.x) / 2;
-        const y = (nowy + start.y) / 2;
-        const r = Math.min(Math.abs(nowx - x), Math.abs(nowy - y));
+        const midx = (nowx + start.x) / 2;
+        const upy = Math.min(nowy, start.y);
+        const downy = Math.max(nowy, start.y);
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.beginPath();
-        ctx.arc(x, y, r, 0, 2 * Math.PI);
+        ctx.moveTo(cursor.x, downy);
+        ctx.lineTo(start.x, downy);
+        ctx.lineTo(midx, upy);
+        ctx.lineTo(cursor.x, downy);
+        ctx.lineTo(start.x, downy); // make start and end point together
         ctx.stroke();
     }, 
     end: function(){
@@ -163,7 +169,6 @@ font = {
         inputField.style.top  = y + 'px';
         inputField.onkeydown = (e) => {
             const key = e.key;
-            console.log(key);
             if(key === 'Enter'){
                 inputVal = inputField.value;
                 document.body.removeChild(inputField);
@@ -173,6 +178,10 @@ font = {
                 const color = getColor();
                 ctx.fillStyle = color;
                 ctx.fillText(inputVal, x, y);
+                hasInput = 0;
+            }
+            if(key === 'Escape'){
+                document.body.removeChild(inputField);
                 hasInput = 0;
             }
         } 
@@ -205,7 +214,7 @@ canvas.addEventListener('mousedown', () => {
         case 'circle':
             createCircle.start();
             break;
-        case 'triangle':
+        case 'tri':
             createTriangle.start();
             break;
         case 'font':
@@ -230,7 +239,7 @@ canvas.addEventListener('mouseup', () => {
         case 'circle':
             createCircle.end();
             break;
-        case 'triangle':
+        case 'tri':
             createTriangle.end();
             break;
         case 'font':
@@ -246,8 +255,42 @@ canvas.addEventListener('mouseup', () => {
 selectMode = (mode) => {
     console.log(mode);
     selectedMode = mode;
+    switch(selectedMode){
+        case 'brush':
+            document.getElementById('paper').style.cursor = "url('img/brush.png'), auto";
+            break;
+        case 'erase':
+            document.getElementById('paper').style.cursor = "url('img/eraser.png'), auto";
+            break;
+        case 'rect':
+            document.getElementById('paper').style.cursor = "url('img/rectangle.png'), auto";
+            break;
+        case 'circle':
+            document.getElementById('paper').style.cursor = "url('img/circle.png'), auto";
+            break;
+        case 'tri':
+            document.getElementById('paper').style.cursor = "url('img/triangle.png'), auto";
+            break;
+        case 'font':
+            document.getElementById('paper').style.cursor = "url('img/font.png'), auto";
+            break;
+
+        default:
+            console.log('selectedMode error');
+    }
 };
 
 resetAll = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+download = () => { // maybe can add custom file name
+    let tmpLink = document.createElement('a');
+    tmpLink.download = 'picture.png';
+    tmpLink.href = canvas.toDataURL('image/png');
+    tmpLink.click();
+}
+
+upload = () => {
+
 }
