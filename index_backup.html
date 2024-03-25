@@ -21,31 +21,16 @@
         <button onclick="selectMode(this.id)" id="rect">rectangle</button>
         <button onclick="selectMode(this.id)" id="circle">circle</button>
         <button onclick="selectMode(this.id)" id="tri">triangle</button>
-        <button onclick="selectMode(this.id)" id="font">font</button>
-        <br>
+        <button data-toggle="modal" data-target="#fontModal">font</button>
         <button onclick="resetAll()">reset</button>
         <button onclick="download()">download</button>
         <button data-toggle="modal" data-target="#uploadModal">upload</button>
-        <button onclick="Undo()">undo</button>
-        <button onclick="Redo()">redo</button>
     </div>
 
     <div>
         <input type="range" min="1" max="30" step="1" value="5" id="thickness">
         <canvas id="palette-main" width="300px" height="300px"></canvas>
         <canvas id="palette-right" width="50px" height="300px"></canvas>
-        <select id="font-family">
-            <option value="Arial">Arial</option>
-            <option value="Times New Roman">Times New Roman</option>
-            <option value="serif">serif</option>
-        </select>
-        <select id="font-size">
-            <option value="10">10px</option>
-            <option value="30">30px</option>
-            <option value="60">60px</option>
-            <option value="100">100px</option>
-        </select>
-
     </div>
 
     <!-- upload file modal -->
@@ -68,6 +53,37 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="fontModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Font</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <select id="font-family">
+                        <option value="Arial">Arial</option>
+                        <option value="Times New Roman">Times New Roman</option>
+                        <option value="serif">serif</option>
+                    </select>
+                    <select id="font-size">
+                        <option value="10">10px</option>
+                        <option value="30">30px</option>
+                        <option value="60">60px</option>
+                        <option value="100">100px</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="selectMode(this.id)" id="font">send</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 
 

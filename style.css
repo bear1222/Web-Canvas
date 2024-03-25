@@ -2,6 +2,9 @@
     position: absolute;
     top: 0px;
     left: 0px;
+}
+
+#paper{
     cursor: url('img/brush.png'), auto;
 }
 

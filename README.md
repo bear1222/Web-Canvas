@@ -48,7 +48,7 @@ table th{
 </style>
 
 ### Some Problem
-* eraser can erase everything?
+* eraser can erase everything(include uploaded img)?
 * can reset be undo?
 * can draw on image?
 * If change font-family/size after the input area create?
