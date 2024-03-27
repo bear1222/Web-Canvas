@@ -69,7 +69,9 @@ canvas_right.addEventListener('click', (e) => {
             break;
         }
     }
-    show_palette_main(rgbToHex(color.r, color.g, color.b));
+    const col = rgbToHex(color.r, color.g, color.b);
+    selectredColor = col;
+    show_palette_main(col);
 });
 
 let selectredColor = '#000';

@@ -14,8 +14,8 @@
 | **Advanced tools**                               | **Score** | **Check** |
 | :----------------------------------------------- | :-------: | :-------: |
 | Different brush shapes                           | 15%       | Y         |
-| Un/Re-do button                                  | 10%       | N         |
-| Image tool                                       | 5%        | N         |
+| Un/Re-do button                                  | 10%       | Y         |
+| Image tool                                       | 5%        | Y         |
 | Download                                         | 5%        | Y         |
 
 | **Other useful widgets**                         | **Score** | **Check** |
@@ -38,8 +38,13 @@
     your web page URL.
 
 ### Others (Optional)
-
-    Anything you want to say to TAs.
+#### finish
+* rotate
+* flip
+* erase area
+#### ing
+* erase a record
+* paint
 
 <style>
 table th{
@@ -53,4 +58,3 @@ table th{
 * can draw on image?
 * If change font-family/size after the input area create?
 * press reset after create input area
-

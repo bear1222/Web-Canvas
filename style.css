@@ -1,4 +1,66 @@
+body{
+    margin: 0;
+    padding: 0;
+}
+
+.flex-container{
+    padding: 20px;
+    width:  100vw;
+    height: 100vh;
+    background-image: linear-gradient(to bottom right, #8EC5FC, #E0C3FC, #F1CC8A);
+    display: flex;
+    flex-direction: column;
+}
+.title{
+    width: 100%;
+    text-align: center;
+    margin: 10px;
+}
+.main{
+    position: relative;
+    height: 100%;
+    display: flex;
+}
+.toolbar{
+    flex: 1;
+    margin: 10px;
+
+}
+.tool{
+    width: 100px;
+}
+.tool-line{
+    display: flex;
+}
+.horizontal.dropdown-menu.show {
+  display: flex;
+}
+
+.toolbar2{
+    display: flex;
+    justify-content: center;
+}
+.item{
+    flex: 1;
+    text-align: center;
+}
+
+.canvas-wrapper{
+    flex: 2;
+    margin: 10px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.canvas{
+    width: 700px;
+    height: 700px;
+    position: relative;
+    background-color: white;
+}
 #savedpaper, #paper{
+    border: 1px black solid;
     position: absolute;
     top: 0px;
     left: 0px;
@@ -6,10 +68,4 @@
 
 #paper{
     cursor: url('img/brush.png'), auto;
-}
-
-.wrapper{
-    position: relative;
-    height:800px;
-    width: 700px;
 }

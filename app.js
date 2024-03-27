@@ -1,5 +1,4 @@
 let canvas = document.getElementById('paper');
-//console.log(canvas);
 let ctx = canvas.getContext('2d');
 let thicknessSelector = document.getElementById('thickness');
 let colorSelector = document.getElementById('color');
@@ -8,11 +7,16 @@ let selectedMode = "brush";
 let savedCanvas = document.getElementById('savedpaper');
 let savedCtx = savedCanvas.getContext('2d');
 
+//canvas.width = window.width;
+//canvas.height = window.height;
+//savedCanvas.width = window.width;
+//savedCanvas.height = window.height;
+
 cursor = {x: 0, y: 0};
 start = {x: 0, y: 0};
 canvas.addEventListener('mousemove', (e) => {
-    cursor.x = e.pageX;
-    cursor.y = e.pageY;
+    cursor.x = e.offsetX;
+    cursor.y = e.offsetY;
 });
 
 ////////// not finish
@@ -33,6 +37,7 @@ var record = {
         this.records = [];
     }, 
     addRecord: function(rec){
+        console.log(rec);
         this.now++;
         if(this.now != this.records.length){
             this.records = this.records.slice(0, this.now);
@@ -51,6 +56,8 @@ var record = {
         ctx.globalCompositeOperation = "source-over";
         ctx.strokeStyle = color;
         ctx.lineWidth = width;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
 
         let x = 0;
         let y = 0;
@@ -66,6 +73,7 @@ var record = {
                 break;
             case 'erase':
                 ctx.globalCompositeOperation = "destination-out";
+                ctx.beginPath();
                 ctx.moveTo(points[0].x, points[0].y);
                 points.forEach(element => {
                     ctx.lineTo(element.x, element.y);
@@ -94,6 +102,15 @@ var record = {
                 ctx.fillStyle = color;
                 ctx.fillText(text, points.x, points.y);
                 break;
+            case 'rotR':
+                rotateRight();
+                break;
+            case 'rotL':
+                rotateLeft();
+                break;
+            case 'flip':
+                flip();
+                break;
 
             default:
                 console.log('addBack type error');
@@ -109,9 +126,8 @@ var record = {
         this.now--;
     },
     redo: function(){
-        if(this.now == this.records.length - 1){ // start here
+        if(this.now == this.records.length - 1)
             return;
-        }
         this.addBack(this.records[this.now + 1]);
         this.now++;
     }
@@ -163,20 +179,50 @@ erase = {
     }
 };
 
-createRect = {
+eraseArea = {
     start: function(){
-        savedCtx.drawImage(canvas, 0, 0);
+        ctx.save();
+        savedCtx.drawImage(canvas, 0, 0, canvas.width, canvas.height);
         ctx.globalCompositeOperation = "source-over";
         ctx.beginPath();
         ctx.moveTo(cursor.x, cursor.y);
         start.x = cursor.x;
         start.y = cursor.y;
-        console.log("start:", start);
+        console.log(start);
         canvas.addEventListener('mousemove', this.move);
     }, 
     move: function(){
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.beginPath();
+        ctx.strokeStyle = 'gray';
+        ctx.lineWidth = '1';
+        ctx.setLineDash([3, 3]);
+        ctx.rect(start.x, start.y, cursor.x - start.x, cursor.y - start.y);
+        ctx.stroke();
+    },
+    end: function(){
+        canvas.removeEventListener('mousemove', this.move);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(savedCanvas, 0, 0, canvas.width, canvas.height);
+        savedCtx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.clearRect(start.x, start.y, cursor.x - start.x, cursor.y - start.y);
+
+        ctx.restore();
+    }
+}
+
+createRect = {
+    start: function(){
+        savedCtx.drawImage(canvas, 0, 0);
+        ctx.globalCompositeOperation = "source-over";
+        start.x = cursor.x;
+        start.y = cursor.y;
+        canvas.addEventListener('mousemove', this.move);
+    }, 
+    move: function(){
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.beginPath();
+        ctx.moveTo(cursor.x, cursor.y);
         ctx.rect(start.x, start.y, cursor.x - start.x, cursor.y - start.y);
         ctx.stroke();
         points = {x: start.x, y: start.y, width: cursor.x - start.x, height: cursor.y - start.y}; // (start), (width, height)
@@ -249,7 +295,7 @@ createTriangle = {
         ctx.lineTo(start.x, downy);
         ctx.lineTo(midx, upy);
         ctx.lineTo(cursor.x, downy);
-        ctx.lineTo(start.x, downy); // make start and end point together
+//        ctx.lineTo(start.x, downy); // make start and end point together
         ctx.stroke();
 
         points = [];
@@ -266,6 +312,16 @@ createTriangle = {
         savedCtx.clearRect(0, 0, canvas.width, canvas.height);
         let tmpRecord = new makeRecord('tri', points, ctx.strokeStyle, ctx.lineWidth, null, null);
         record.addRecord(tmpRecord);
+    }
+};
+
+paint = {
+    start: function(){
+
+
+    }, 
+    end: function(){
+
     }
 };
 
@@ -317,7 +373,10 @@ font = {
 canvas.addEventListener('mousedown', () => {
     const color = getColor();
     ctx.strokeStyle = color;
+    ctx.globalCompositeOperation = "source-over";
     ctx.lineWidth = thicknessSelector.value;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
     console.log(color, ctx.lineWidth);
 
     switch(selectedMode){
@@ -326,6 +385,9 @@ canvas.addEventListener('mousedown', () => {
             break;
         case 'erase':
             erase.start();
+            break;
+        case 'eraseArea':
+            eraseArea.start();
             break;
         case 'rect':
             createRect.start();
@@ -352,6 +414,8 @@ canvas.addEventListener('mouseup', () => {
         case 'erase':
             erase.end();
             break;
+        case 'eraseArea':
+            eraseArea.end();
         case 'rect':
             createRect.end();
             break;
@@ -372,14 +436,26 @@ canvas.addEventListener('mouseup', () => {
 
 ////////
 selectMode = (mode) => {
-    console.log(mode);
     selectedMode = mode;
-    switch(selectedMode){
+    if(mode === 'erase_choose'){
+        const src = document.getElementById('erase_choose').src;
+        console.log(src);
+        if(src.includes("img/eraser2.png"))
+            selectedMode = 'erase';
+        else
+            selectedMode = 'eraseArea';
+    }
+    switch(selectedMode){ // cursor icon
         case 'brush':
             document.getElementById('paper').style.cursor = "url('img/brush.png'), auto";
             break;
         case 'erase':
+            document.getElementById('erase_choose').src = "img/eraser2.png";
             document.getElementById('paper').style.cursor = "url('img/eraser.png'), auto";
+            break;
+        case 'eraseArea':
+            document.getElementById('erase_choose').src = "img/eraseArea2.png";
+            document.getElementById('paper').style.cursor = "url('img/eraseArea.png'), auto";
             break;
         case 'rect':
             document.getElementById('paper').style.cursor = "url('img/rectangle.png'), auto";
@@ -397,6 +473,7 @@ selectMode = (mode) => {
         default:
             console.log('selectedMode error');
     }
+    console.log(selectedMode);
 };
 
 resetAll = () => {
@@ -435,4 +512,61 @@ Undo = () => {
 }
 Redo = () => {
     record.redo();
+}
+
+rotateRight = (e) => {
+    ctx.save();
+    console.log('rotR');
+    
+    savedCtx.clearRect(0, 0, canvas.width, canvas.height);
+    savedCtx.drawImage(canvas, 0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.translate(canvas.width / 2, canvas.height / 2);
+
+    ctx.rotate(Math.PI / 180 * 90);
+    ctx.globalCompositeOperation = "source-over";
+    ctx.drawImage(savedCanvas, -canvas.width / 2, -canvas.height / 2, canvas.width, canvas.height);
+    savedCtx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.restore();
+
+    if(e === 'add'){
+        const rec = new makeRecord('rotR', null, null, null, null, null);
+        record.addRecord(rec);
+    }
+}
+rotateLeft = (e) => {
+    ctx.save();
+    console.log('rotL');
+    
+    savedCtx.clearRect(0, 0, canvas.width, canvas.height);
+    savedCtx.drawImage(canvas, 0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.translate(canvas.width / 2, canvas.height / 2);
+
+    ctx.rotate(3 * Math.PI / 180 * 90);
+    ctx.globalCompositeOperation = "source-over";
+    ctx.drawImage(savedCanvas, -canvas.width / 2, -canvas.height / 2, canvas.width, canvas.height);
+    savedCtx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.restore();
+    if(e === 'add'){
+        const rec = new makeRecord('rotL', null, null, null, null, null);
+        record.addRecord(rec);
+    }
+}
+
+flip = (e) => {
+    ctx.save();
+    savedCtx.clearRect(0, 0, canvas.width, canvas.height);
+    savedCtx.drawImage(canvas, 0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.translate(canvas.width / 2, canvas.height / 2);
+    ctx.scale(-1, 1);
+    ctx.globalCompositeOperation = "source-over";
+    ctx.drawImage(savedCanvas, -canvas.width / 2, -canvas.height / 2, canvas.width, canvas.height);
+    savedCtx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.restore();
+    if(e === 'add'){
+        const rec = new makeRecord('flip', null, null, null, null, null);
+        record.addRecord(rec);
+    }
 }
