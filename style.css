@@ -1,10 +1,16 @@
+:root{
+    --top_margin: 80px;
+    --bottom_margin: 70px;
+    --right_margin: 220px;
+    --left_margin: 110px;
+}
+
 body{
     margin: 0;
     padding: 0;
 }
 
 .flex-container{
-    padding: 20px;
     width:  100vw;
     height: 100vh;
     background-image: linear-gradient(to bottom right, #8EC5FC, #E0C3FC, #F1CC8A);
@@ -12,9 +18,10 @@ body{
     flex-direction: column;
 }
 .title{
+    margin-top: var(--top_margin);
     width: 100%;
     text-align: center;
-    margin: 10px;
+    margin-bottom: 15px;
 }
 .main{
     position: relative;
@@ -22,40 +29,93 @@ body{
     display: flex;
 }
 .toolbar{
-    flex: 1;
-    margin: 10px;
-
+    flex: 5;
+    margin: 15px 0;
+    margin-right: var(--right_margin);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 .tool{
     width: 100px;
 }
 .tool-line{
+    width: 100%;
     display: flex;
+    flex: 2;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 30px;
 }
 .horizontal.dropdown-menu.show {
   display: flex;
 }
 
+.selector{
+    width: 100%;
+    flex: 3;
+    display: flex;
+    align-items: center;
+    margin: 0 30px;
+    justify-content: center;
+}
+.palette{
+    flex: 3;
+    justify-content: center;
+    padding: 0 70px;
+}
+.other-selector{
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.fill-selector{
+    justify-content: center;
+    text-align: center;
+    margin: 10px;
+}
+.width-selector{
+    margin: 10px;
+}
+#thickness{
+    width: 100%;
+}
+.font-selector{
+    margin: 10px;
+}
+.form-select-sm{
+    width: 100%;
+}
+
 .toolbar2{
     display: flex;
     justify-content: center;
+    margin-bottom: var(--bottom_margin);
+    margin-top: 20px;
+    padding: 0px 180px;
 }
 .item{
     flex: 1;
     text-align: center;
+    justify-content: center;
+}
+img:not([disabled]){
+    cursor: pointer;
 }
 
 .canvas-wrapper{
-    flex: 2;
-    margin: 10px;
+    flex: 6;
+    margin-left: var(--left_margin);
     text-align: center;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 .canvas{
-    width: 700px;
-    height: 700px;
+    width: 600px;
+    height: 600px;
     position: relative;
     background-color: white;
 }

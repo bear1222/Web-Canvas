@@ -3,9 +3,11 @@ let ctx = canvas.getContext('2d');
 let thicknessSelector = document.getElementById('thickness');
 let colorSelector = document.getElementById('color');
 let selectedMode = "brush";
+let shapeFill = 0;
 
 let savedCanvas = document.getElementById('savedpaper');
 let savedCtx = savedCanvas.getContext('2d');
+
 
 //canvas.width = window.width;
 //canvas.height = window.height;
@@ -20,14 +22,24 @@ canvas.addEventListener('mousemove', (e) => {
 });
 
 ////////// not finish
-function makeRecord(type, points, color, width, font_style, text){ 
+function makeRecord(type, points, color, width, font_style, text, fill){ 
     this.type = type;
     this.points = points;
     this.color = color;
     this.width = width;
     this.font_style = font_style;
     this.text = text;
+    this.fill = fill;
 }
+
+checkUndoRedo = () => {
+    const undoButton = document.getElementById('undo');
+    if(record.now < 0) undoButton.setAttribute('disabled', 'disabled');
+    else undoButton.removeAttribute('disabled', 'disabled');
+    const redoButton = document.getElementById('redo');
+    if(record.now == record.records.length - 1) redoButton.setAttribute('disabled', 'disabled');
+    else redoButton.removeAttribute('disabled', 'disabled');
+};
 
 var record = {
     records: [],
@@ -43,6 +55,7 @@ var record = {
             this.records = this.records.slice(0, this.now);
         }
         this.records.push(rec);
+        checkUndoRedo();
     },
     addBack: function(rec){
         console.log('addBack', rec);
@@ -53,8 +66,10 @@ var record = {
         const font_size = rec.font_size;
         const font_family = rec.font_family;
         const text = rec.text;
+        const fill = rec.fill;
         ctx.globalCompositeOperation = "source-over";
         ctx.strokeStyle = color;
+        ctx.fillStyle = color;
         ctx.lineWidth = width;
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';
@@ -63,7 +78,6 @@ var record = {
         let y = 0;
         switch(type){
             case 'brush':
-            case 'tri':
                 ctx.beginPath();
                 ctx.moveTo(points[0].x, points[0].y);
                 points.forEach(element => {
@@ -80,6 +94,9 @@ var record = {
                 });
                 ctx.stroke();
                 break;
+            case 'eraseArea':
+                ctx.clearRect(points.x, points.y, points.width, points.height);
+                break;
             case 'rect':
                 x = points.x;
                 y = points.y;
@@ -87,7 +104,8 @@ var record = {
                 const height = points.height;
                 ctx.beginPath();
                 ctx.rect(x, y, width, height);
-                ctx.stroke();
+                if(fill === 1) ctx.fill();
+                else ctx.stroke();
                 break;
             case 'circle':
                 x = points.x;
@@ -95,7 +113,17 @@ var record = {
                 const r = points.r;
                 ctx.beginPath();
                 ctx.arc(x, y, r, 0, 2 * Math.PI);
-                ctx.stroke();
+                if(fill === 1) ctx.fill();
+                else ctx.stroke();
+                break;
+            case 'tri':
+                ctx.beginPath();
+                ctx.moveTo(points[0].x, points[0].y);
+                points.forEach(element => {
+                    ctx.lineTo(element.x, element.y);
+                });
+                if(fill === 1) ctx.fill();
+                else ctx.stroke();
                 break;
             case 'font':
                 ctx.font = `${font_size}px ${font_family}`;
@@ -111,6 +139,9 @@ var record = {
             case 'flip':
                 flip();
                 break;
+            case 'img':
+                ctx.drawImage(color, 0, 0);
+                break;
 
             default:
                 console.log('addBack type error');
@@ -124,12 +155,14 @@ var record = {
             this.addBack(this.records[i]);
         }
         this.now--;
+        checkUndoRedo();
     },
     redo: function(){
         if(this.now == this.records.length - 1)
             return;
         this.addBack(this.records[this.now + 1]);
         this.now++;
+        checkUndoRedo();
     }
 };
 
@@ -153,7 +186,7 @@ brush = {
     },
     end: function(){
         canvas.removeEventListener('mousemove', this.move);
-        let tmpRecord = new makeRecord('brush', points, ctx.strokeStyle, ctx.lineWidth, null, null);
+        let tmpRecord = new makeRecord('brush', points, ctx.strokeStyle, ctx.lineWidth, null, null, shapeFill);
         record.addRecord(tmpRecord);
     }
 };
@@ -174,7 +207,7 @@ erase = {
     }, 
     end: function(){
         canvas.removeEventListener('mousemove', this.move);
-        let tmpRecord = new makeRecord('erase', points, ctx.strokeStyle, ctx.lineWidth, null, null);
+        let tmpRecord = new makeRecord('erase', points, ctx.strokeStyle, ctx.lineWidth, null, shapeFill);
         record.addRecord(tmpRecord);
     }
 };
@@ -199,6 +232,7 @@ eraseArea = {
         ctx.setLineDash([3, 3]);
         ctx.rect(start.x, start.y, cursor.x - start.x, cursor.y - start.y);
         ctx.stroke();
+        points = {x: start.x, y: start.y, width: cursor.x - start.x, height: cursor.y - start.y}; // (start), (width, height)
     },
     end: function(){
         canvas.removeEventListener('mousemove', this.move);
@@ -206,6 +240,9 @@ eraseArea = {
         ctx.drawImage(savedCanvas, 0, 0, canvas.width, canvas.height);
         savedCtx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.clearRect(start.x, start.y, cursor.x - start.x, cursor.y - start.y);
+
+        let tmpRecord = new makeRecord('eraseArea', points, ctx.strokeStyle, ctx.lineWidth, null, shapeFill);
+        record.addRecord(tmpRecord);
 
         ctx.restore();
     }
@@ -224,7 +261,8 @@ createRect = {
         ctx.beginPath();
         ctx.moveTo(cursor.x, cursor.y);
         ctx.rect(start.x, start.y, cursor.x - start.x, cursor.y - start.y);
-        ctx.stroke();
+        if(shapeFill === 1) ctx.fill();
+        else ctx.stroke();
         points = {x: start.x, y: start.y, width: cursor.x - start.x, height: cursor.y - start.y}; // (start), (width, height)
     }, 
     end: function(){
@@ -233,7 +271,9 @@ createRect = {
         ctx.drawImage(savedCanvas, 0, 0, canvas.width, canvas.height);
         savedCtx.clearRect(0, 0, canvas.width, canvas.height);
 
-        let tmpRecord = new makeRecord('rect', points, ctx.strokeStyle, ctx.lineWidth, null, null);
+        console.log('hi');
+        const fill = shapeFill;
+        let tmpRecord = new makeRecord('rect', points, ctx.strokeStyle, ctx.lineWidth, null, null, fill);
         record.addRecord(tmpRecord);
     }
 
@@ -259,7 +299,8 @@ createCircle = {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.beginPath();
         ctx.arc(x, y, r, 0, 2 * Math.PI);
-        ctx.stroke();
+        if(shapeFill === 1) ctx.fill();
+        else ctx.stroke();
         points = {x: x, y: y, r: r};
     }, 
     end: function(){
@@ -268,7 +309,8 @@ createCircle = {
         ctx.drawImage(savedCanvas, 0, 0, canvas.width, canvas.height);
         savedCtx.clearRect(0, 0, canvas.width, canvas.height);
 
-        let tmpRecord = new makeRecord('circle', points, ctx.strokeStyle, ctx.lineWidth, null, null);
+        const fill = shapeFill;
+        let tmpRecord = new makeRecord('circle', points, ctx.strokeStyle, ctx.lineWidth, null, null, fill);
         record.addRecord(tmpRecord);
     }
 };
@@ -296,7 +338,8 @@ createTriangle = {
         ctx.lineTo(midx, upy);
         ctx.lineTo(cursor.x, downy);
 //        ctx.lineTo(start.x, downy); // make start and end point together
-        ctx.stroke();
+        if(shapeFill === 1) ctx.fill();
+        else ctx.stroke();
 
         points = [];
         points.push({x: cursor.x, y: downy});
@@ -310,7 +353,9 @@ createTriangle = {
         savedCtx.drawImage(canvas, 0, 0, canvas.width, canvas.height);
         ctx.drawImage(savedCanvas, 0, 0, canvas.width, canvas.height);
         savedCtx.clearRect(0, 0, canvas.width, canvas.height);
-        let tmpRecord = new makeRecord('tri', points, ctx.strokeStyle, ctx.lineWidth, null, null);
+
+        const fill = shapeFill;
+        let tmpRecord = new makeRecord('tri', points, ctx.strokeStyle, ctx.lineWidth, null, null, fill);
         record.addRecord(tmpRecord);
     }
 };
@@ -337,8 +382,8 @@ font = {
         let inputField = document.createElement('input');
         inputField.type = 'text';
         inputField.style.position = 'absolute';
-        inputField.style.left = x + 'px';
-        inputField.style.top  = y + 'px';
+        inputField.style.left = document.getElementById('paper').getBoundingClientRect().left + x + 'px';
+        inputField.style.top  = document.getElementById('paper').getBoundingClientRect().top + y + 'px';
         inputField.onkeydown = (e) => {
             const key = e.key;
             if(key === 'Enter'){
@@ -348,10 +393,10 @@ font = {
                 const font_size = document.getElementById('font-size').value;
                 ctx.font = `${font_size}px ${font_family}`;
                 const color = getColor();
-                ctx.fillStyle = color;
                 ctx.fillText(inputVal, x, y);
                 points = {x: x, y: y};
-                let tmpRecord = new makeRecord('font', points, color, ctx.lineWidth, ctx.font, inputVal);
+                const fill = shapeFill;
+                let tmpRecord = new makeRecord('font', points, color, ctx.lineWidth, ctx.font, inputVal, fill);
                 record.addRecord(tmpRecord);
                 hasInput = 0;
             }
@@ -373,6 +418,7 @@ font = {
 canvas.addEventListener('mousedown', () => {
     const color = getColor();
     ctx.strokeStyle = color;
+    ctx.fillStyle = color;
     ctx.globalCompositeOperation = "source-over";
     ctx.lineWidth = thicknessSelector.value;
     ctx.lineCap = 'round';
@@ -416,6 +462,7 @@ canvas.addEventListener('mouseup', () => {
             break;
         case 'eraseArea':
             eraseArea.end();
+            break;
         case 'rect':
             createRect.end();
             break;
@@ -435,16 +482,7 @@ canvas.addEventListener('mouseup', () => {
 });
 
 ////////
-selectMode = (mode) => {
-    selectedMode = mode;
-    if(mode === 'erase_choose'){
-        const src = document.getElementById('erase_choose').src;
-        console.log(src);
-        if(src.includes("img/eraser2.png"))
-            selectedMode = 'erase';
-        else
-            selectedMode = 'eraseArea';
-    }
+changeCursor = () => {
     switch(selectedMode){ // cursor icon
         case 'brush':
             document.getElementById('paper').style.cursor = "url('img/brush.png'), auto";
@@ -458,13 +496,13 @@ selectMode = (mode) => {
             document.getElementById('paper').style.cursor = "url('img/eraseArea.png'), auto";
             break;
         case 'rect':
-            document.getElementById('paper').style.cursor = "url('img/rectangle.png'), auto";
+            document.getElementById('paper').style.cursor = shapeFill ? "url('img/rectangle_fill.png'), auto" : "url('img/rectangle.png'), auto";
             break;
         case 'circle':
-            document.getElementById('paper').style.cursor = "url('img/circle.png'), auto";
+            document.getElementById('paper').style.cursor = shapeFill ? "url('img/circle_fill.png'), auto" : "url('img/circle.png'), auto";
             break;
         case 'tri':
-            document.getElementById('paper').style.cursor = "url('img/triangle.png'), auto";
+            document.getElementById('paper').style.cursor = shapeFill ? "url('img/triangle_fill.png'), auto" : "url('img/triangle.png'), auto";
             break;
         case 'font':
             document.getElementById('paper').style.cursor = "url('img/font.png'), auto";
@@ -473,6 +511,18 @@ selectMode = (mode) => {
         default:
             console.log('selectedMode error');
     }
+    console.log(selectedMode);
+}
+selectMode = (mode) => {
+    selectedMode = mode;
+    if(mode === 'erase_choose'){
+        const src = document.getElementById('erase_choose').src;
+        if(src.includes("img/eraser2.png"))
+            selectedMode = 'erase';
+        else
+            selectedMode = 'eraseArea';
+    }
+    changeCursor();
     console.log(selectedMode);
 };
 
@@ -497,10 +547,10 @@ upload = () => {
         let img = new Image();
         img.onload = () => {
             // canvas.width 
-            canvas.width = img.width;
-            canvas.height = img.height;
             ctx.drawImage(img, 0, 0);
-            selectMode(selectedMode);
+            // selectMode(selectedMode);
+            let tmpRecord = new makeRecord('img', {x: 0, y: 0}, img, null, null, null, null);
+            record.addRecord(tmpRecord);
         }
         img.src = reader.result;
     }
@@ -569,4 +619,13 @@ flip = (e) => {
         const rec = new makeRecord('flip', null, null, null, null, null);
         record.addRecord(rec);
     }
+}
+
+fillChange = () => {
+    shapeFill = 1 - shapeFill;
+    document.getElementById('rect').src = shapeFill ? 'img/rectangle_fill2.png' : 'img/rectangle2.png';
+    document.getElementById('circle').src = shapeFill ? 'img/circle_fill2.png' : 'img/circle2.png';
+    document.getElementById('tri').src = shapeFill ? 'img/triangle_fill2.png' : 'img/triangle2.png';
+    document.getElementById('fillSelector').src = shapeFill ? 'img/circle_fill2.png' : 'img/circle2.png';
+    changeCursor();
 }

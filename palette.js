@@ -9,6 +9,8 @@ function rgbToHex(r, g, b) {
 
 let canvas_right = document.getElementById('palette-right');
 let ctx_right = canvas_right.getContext('2d', { willReadFrequently: true });
+let canvas_main = document.getElementById('palette-main');
+let ctx_main = canvas_main.getContext('2d', { willReadFrequently: true });
 let graV_right = ctx_right.createLinearGradient(0, 0, 0, canvas_right.height);
 var colorstop = [
     {position: 0,    rgb: '#FF0000'}, 
@@ -23,11 +25,28 @@ colorstop.forEach((e) =>{
     graV_right.addColorStop(e.position, e.rgb);
 });
 // ctx_right.fillStyle = 'green';
-ctx_right.fillStyle = graV_right;
-ctx_right.fillRect(0, 0, canvas_right.width, canvas_right.height);
 
-let canvas_main = document.getElementById('palette-main');
-let ctx_main = canvas_main.getContext('2d', { willReadFrequently: true });
+let picker_right = {x: 0, y: 0.33 * 300, color: '#00F'};
+let picker_main = {x: 10, y: 290};
+draw = () => {
+    ctx_right.fillStyle = graV_right;
+    ctx_right.fillRect(0, 0, canvas_right.width, canvas_right.height);
+    ctx_right.beginPath();
+    ctx_right.strokeStyle = 'white';
+    ctx_right.lineWidth = '4';
+    ctx_right.arc(8, picker_right.y, 7, 0, 2 * Math.PI);
+    // ctx_right.rect(picker_right.x, picker_right.y, 50, 10);
+    ctx_right.stroke();
+
+    show_palette_main(picker_right.color);
+    ctx_main.beginPath();
+    ctx_main.strokeStyle = 'white';
+    ctx_main.lineWidth = '4';
+    ctx_main.arc(picker_main.x, picker_main.y, 7, 0, 2 * Math.PI);
+    ctx_main.stroke()
+    ctx_main.closePath();
+
+}
 
 show_palette_main = (des_color) => {
     let graH = ctx_main.createLinearGradient(0, 0, canvas_main.width, 0);
@@ -43,12 +62,13 @@ show_palette_main = (des_color) => {
     ctx_main.fillRect(0, 0, canvas_main.width, canvas_main.height);
 
 }
-show_palette_main('#00F');
+// show_palette_main('#00F');
 
-canvas_right.addEventListener('click', (e) => {
+move_right = (e) => {
     const x = e.offsetX;
     const y = e.offsetY;
 
+    picker_right.y = y;
     const ratio = y / canvas_right.height;
     let color = {r: 0, g: 0, b: 0};
 
@@ -62,29 +82,34 @@ canvas_right.addEventListener('click', (e) => {
             color.r = color_right[0];
             color.g = color_right[1];
             color.b = color_right[2];
-
-            // color.r = Math.floor(interpolate(hexToRgb(colorstop[i - 1].rgb).r, hexToRgb(colorstop[i].rgb).r, colratio));
-            // color.g = Math.floor(interpolate(hexToRgb(colorstop[i - 1].rgb).g, hexToRgb(colorstop[i].rgb).g, colratio));
-            // color.b = Math.floor(interpolate(hexToRgb(colorstop[i - 1].rgb).b, hexToRgb(colorstop[i].rgb).b, colratio));
             break;
         }
     }
     const col = rgbToHex(color.r, color.g, color.b);
-    selectredColor = col;
-    show_palette_main(col);
+    picker_right.color = col;
+};
+canvas_right.addEventListener('click', (e) => {
+    move_right(e);
 });
 
-let selectredColor = '#000';
 canvas_main.addEventListener('click', (e) => {
     const x = e.offsetX;
     const y = e.offsetY;
 
-    pixel = ctx_main.getImageData(x, y, 1, 1)['data'];
+    picker_main.x = x;
+    picker_main.y = y;
 
-    let color = rgbToHex(pixel[0], pixel[1], pixel[2]);
-    selectredColor = color;
+    ctx_main.beginPath();
+    ctx_main.arc(x, y, 5, 0, 2 * Math.PI);
+    ctx_main.stroke()
+    ctx_main.closePath();
 });
 
+setInterval(() => draw(), 1);
+
 function getColor(){
-    return selectredColor;
+    const x = picker_main.x;
+    const y = picker_main.y;
+    const pixel = ctx_main.getImageData(x, y, 1, 1)['data'];
+    return rgbToHex(pixel[0], pixel[1], pixel[2]);
 }

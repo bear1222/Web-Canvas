@@ -25,7 +25,7 @@
                     <input type="file" id="uploadImg">
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="upload-button" onclick="upload()">Upload</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="upload-button" onclick="upload()">Upload</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
             </div>
@@ -38,70 +38,77 @@
         <div class="main">
             <div class="canvas-wrapper">
                 <div class="canvas">
-                    <canvas id="savedpaper" width="700px" height="700px"></canvas>
-                    <canvas id="paper"      width="700px" height="700px"></canvas>
+                    <canvas id="savedpaper" width="600px" height="600px"></canvas>
+                    <canvas id="paper"      width="600px" height="600px"></canvas>
 
                 </div>
             </div>
             <div class="toolbar">
-                <div>
-                    <div class="tool-line">
-                        <div class="item">
-                            <img class='tool' src="img/brush2.png" onclick="selectMode(this.id)" id="brush">
-                        </div>
-                        <div class="item">
-                            <div class="dropdown">
-                                <a href="#" id="menu1" data-toggle="dropdown" class="dropdown-toggle" data-offset="-50, 35" data-auto-close="inside" onclick="selectMode('erase_choose')">
-                                    <img src="img/eraser2.png" class="tool" id="erase_choose" >
-                                </a>
-                                <ul class="dropdown-menu horizontal" aria-labelledby="menu1">
-                                    <li>
-                                        <img class='tool' src="img/eraser2.png" onclick="selectMode(this.id)" id="erase">
-                                    </li>
-                                    <li>
-                                        <img class='tool' src="img/eraseArea2.png" onclick="selectMode(this.id)" id="eraseArea">
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <img class='tool' src="img/font2.png" onclick="selectMode(this.id)" id="font">
-                        </div>
-                    </div>
-                    <!-- <div class="item">
-                        <img class='tool' src="img/eraser2.png" onclick="selectMode(this.id)" id="erase">
+                <div class="tool-line">
+                    <div class="item">
+                        <img class='tool' src="img/brush2.png" onclick="selectMode(this.id)" id="brush">
                     </div>
                     <div class="item">
-                        <img class='tool' src="img/eraseArea2.png" onclick="selectMode(this.id)" id="eraseArea">
-                    </div> -->
-                    <div class="tool-line">
-                        <div class="item">
-                            <img class='tool' src="img/rectangle2.png" onclick="selectMode(this.id)" id="rect">
+                        <div class="dropdown">
+                            <a href="#" id="menu1" data-toggle="dropdown" class="dropdown-toggle" data-offset="-50, 35" data-auto-close="inside" onclick="selectMode('erase_choose')">
+                                <img src="img/eraser2.png" class="tool" id="erase_choose" >
+                            </a>
+                            <ul class="dropdown-menu horizontal" aria-labelledby="menu1">
+                                <li>
+                                    <img class='tool' src="img/eraser2.png" onclick="selectMode(this.id)" id="erase">
+                                </li>
+                                <li>
+                                    <img class='tool' src="img/eraseArea2.png" onclick="selectMode(this.id)" id="eraseArea">
+                                </li>
+                            </ul>
                         </div>
-                        <div class="item">
-                            <img class='tool' src="img/circle2.png" onclick="selectMode(this.id)" id="circle">
-                        </div>
-                        <div class="item">
-                            <img class='tool' src="img/triangle2.png" onclick="selectMode(this.id)" id="tri">
-                        </div>
+                    </div>
+                    <div class="item">
+                        <img class='tool' src="img/font2.png" onclick="selectMode(this.id)" id="font">
+                    </div>
+                </div>
+                <div class="tool-line">
+                    <div class="item">
+                        <img class='tool' src="img/rectangle2.png" onclick="selectMode(this.id)" id="rect">
+                    </div>
+                    <div class="item">
+                        <img class='tool' src="img/circle2.png" onclick="selectMode(this.id)" id="circle">
+                    </div>
+                    <div class="item">
+                        <img class='tool' src="img/triangle2.png" onclick="selectMode(this.id)" id="tri">
                     </div>
                 </div>
 
-                <div>
-                    <input type="range" min="1" max="30" step="1" value="5" id="thickness">
-                    <canvas id="palette-main" width="300px" height="300px"></canvas>
-                    <canvas id="palette-right" width="50px" height="300px"></canvas>
-                    <select id="font-family">
-                        <option value="Arial">Arial</option>
-                        <option value="Times New Roman">Times New Roman</option>
-                        <option value="serif">serif</option>
-                    </select>
-                    <select id="font-size">
-                        <option value="10">10px</option>
-                        <option value="30">30px</option>
-                        <option value="60">60px</option>
-                        <option value="100">100px</option>
-                    </select>
+                <div class="selector">
+                    <div class="palette">
+                        <canvas id="palette-main" width="300px" height="300px"></canvas>
+                        <canvas id="palette-right" width="15px" height="300px"></canvas>
+                    </div>
+                    <div class="other-selector">
+                        <div class="fill-selector">
+                            <img src="img/circle2.png" width="50px" id="fillSelector" onclick="fillChange()">
+                        </div>
+                        <div class="width-selector">
+                            <input type="range" min="1" max="30" step="1" value="5" id="thickness">
+                        </div>
+                        <div class="font-selector">
+                            <select id="font-family" class="form-select-sm" aria-label="Default select example">
+                                <option value="Arial">Arial</option>
+                                <option value="Times New Roman">Times New Roman</option>
+                                <option value="serif">serif</option>
+                                <option value="Microsoft JhengHei">微軟正黑體</option>
+                                <option value="PMingLiU">新細明體</option>
+                                <option value="DFKai-SB">標楷體</option>
+                            </select>
+                            <select id="font-size" class="form-select-sm">
+                                <option value="12">12px</option>
+                                <option value="24">24px</option>
+                                <option value="32">32px</option>
+                                <option value="60">60px</option>
+                                <option value="80">80px</option>
+                            </select>
+                        </div>
+                    </div>
                 </div> 
             </div>
         </div>
@@ -116,10 +123,10 @@
                 <img src="img/upload.png" data-toggle="modal" data-target="#uploadModal">
             </div>
             <div class="item">
-                <img src="img/undo.png" onclick="Undo()">
+                <img src="img/undo.png" onclick="Undo()" id="undo" disabled="disabled">
             </div>
             <div class="item">
-                <img src="img/redo.png" onclick="Redo()">
+                <img src="img/redo.png" onclick="Redo()" id="redo" disabled="disabled">
             </div>
             <div class="item">
                 <img src="img/rotL.png" onclick="rotateLeft('add')">
