@@ -27,9 +27,8 @@ body{
 
 .below{
     margin: auto;
-    padding: 0 4%;
     height: 100%;
-    width: 90%;
+    width: 1400px;
     display: flex;
     flex-direction: column;
 }
@@ -41,8 +40,10 @@ body{
     height: 100%;
     width: 50%;
     justify-content: center;
+    text-align: center;
 }
 .canvas{
+    /* margin: auto; */
     height: 600px;
     width: 600px;
     background-color: white;
