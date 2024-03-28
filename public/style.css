@@ -110,13 +110,23 @@ body{
 .toolbar2{
     flex: 1;
     display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .item{
     flex: 1;
     justify-content: center;
+    align-items: center;
     text-align: center;
+    vertical-align: center;
+}
+img{
+    width: 64px;
 }
 img:not([disabled]){
     cursor: pointer;
+}
+#fillSelector{
+    width: 40px;
 }
