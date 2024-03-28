@@ -1,0 +1,122 @@
+:root{
+    --top_margin: 80px;
+    --bottom_margin: 70px;
+    --right_margin: 1%;
+    --left_margin:  1%;
+}
+
+body{
+    margin: 0;
+    padding: 0;
+}
+
+.flex-container{
+    width:  100vw;
+    height: 100vh;
+    background-image: linear-gradient(to bottom right, #8EC5FC, #E0C3FC, #F1CC8A);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.title{
+    margin-top: var(--top_margin);
+    width: 100%;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.below{
+    margin: auto;
+    padding: 0 4%;
+    height: 100%;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+}
+.main{
+    flex: 4;
+    display: flex;
+}
+.canvas-wrapper{
+    height: 100%;
+    width: 50%;
+    justify-content: center;
+}
+.canvas{
+    height: 600px;
+    width: 600px;
+    background-color: white;
+    position: relative;
+}
+#savedpaper, #paper{
+    border: 1px black solid;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+#paper{
+    cursor: url('img/brush.png'), auto;
+}
+
+.toolbar{
+    height: 100%;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.tool-line{
+    margin: 20px 0;
+    display: flex;
+}
+.horizontal.dropdown-menu.show {
+    display: flex;
+}
+.selector{
+    margin: 10px 0;
+    display: flex;
+}
+.palette{
+    flex: 2;
+    justify-content: center;
+    text-align: center;
+}
+.other-selector{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.fill-selector{
+    justify-content: center;
+    text-align: center;
+    margin: 20px;
+}
+.width-selector{
+    margin: 20px;
+}
+#thickness{
+    width: 100%;
+}
+.font-selector{
+    margin: 20px;
+}
+.form-select-sm{
+    width: 100%;
+}
+
+
+
+.toolbar2{
+    flex: 1;
+    display: flex;
+}
+
+.item{
+    flex: 1;
+    justify-content: center;
+    text-align: center;
+}
+img:not([disabled]){
+    cursor: pointer;
+}

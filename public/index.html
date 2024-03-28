@@ -1,90 +1,155 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Welcome to Firebase Hosting</title>
-
-    <!-- update the version number as needed -->
-    <script defer src="/__/firebase/10.9.0/firebase-app-compat.js"></script>
-    <!-- include only the Firebase features as you need -->
-    <script defer src="/__/firebase/10.9.0/firebase-auth-compat.js"></script>
-    <script defer src="/__/firebase/10.9.0/firebase-database-compat.js"></script>
-    <script defer src="/__/firebase/10.9.0/firebase-firestore-compat.js"></script>
-    <script defer src="/__/firebase/10.9.0/firebase-functions-compat.js"></script>
-    <script defer src="/__/firebase/10.9.0/firebase-messaging-compat.js"></script>
-    <script defer src="/__/firebase/10.9.0/firebase-storage-compat.js"></script>
-    <script defer src="/__/firebase/10.9.0/firebase-analytics-compat.js"></script>
-    <script defer src="/__/firebase/10.9.0/firebase-remote-config-compat.js"></script>
-    <script defer src="/__/firebase/10.9.0/firebase-performance-compat.js"></script>
-    <!-- 
-      initialize the SDK after all desired features are loaded, set useEmulator to false
-      to avoid connecting the SDK to running emulators.
-    -->
-    <script defer src="/__/firebase/init.js?useEmulator=true"></script>
-
-    <style media="screen">
-      body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
-      #message { background: white; max-width: 360px; margin: 100px auto 16px; padding: 32px 24px; border-radius: 3px; }
-      #message h2 { color: #ffa100; font-weight: bold; font-size: 16px; margin: 0 0 8px; }
-      #message h1 { font-size: 22px; font-weight: 300; color: rgba(0,0,0,0.6); margin: 0 0 16px;}
-      #message p { line-height: 140%; margin: 16px 0 24px; font-size: 14px; }
-      #message a { display: block; text-align: center; background: #039be5; text-transform: uppercase; text-decoration: none; color: white; padding: 16px; border-radius: 4px; }
-      #message, #message a { box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); }
-      #load { color: rgba(0,0,0,0.4); text-align: center; font-size: 13px; }
-      @media (max-width: 600px) {
-        body, #message { margin-top: 0; background: white; box-shadow: none; }
-        body { border-top: 16px solid #ffa100; }
-      }
-    </style>
-  </head>
-  <body>
-    <div id="message">
-      <h2>Welcome</h2>
-      <h1>Firebase Hosting Setup Complete</h1>
-      <p>You're seeing this because you've successfully setup Firebase Hosting. Now it's time to go build something extraordinary!</p>
-      <a target="_blank" href="https://firebase.google.com/docs/hosting/">Open Hosting Documentation</a>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas</title>
+    <!-- Bootstrap CSS -->
+    <!-- <link rel="stylesheet" href="tool.css"> -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"/>
+    <link rel = "stylesheet" href = "style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+    <!-- upload file modal -->
+    <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Upload</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="file" id="uploadImg">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="upload-button" onclick="upload()">Upload</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
     </div>
-    <p id="load">Firebase SDK Loading&hellip;</p>
-    <h1>Hi</h1>
 
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const loadEl = document.querySelector('#load');
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
-        // // The Firebase SDK is initialized and available here!
-        //
-        // firebase.auth().onAuthStateChanged(user => { });
-        // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
-        // firebase.firestore().doc('/foo/bar').get().then(() => { });
-        // firebase.functions().httpsCallable('yourFunction')().then(() => { });
-        // firebase.messaging().requestPermission().then(() => { });
-        // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
-        // firebase.analytics(); // call to activate
-        // firebase.analytics().logEvent('tutorial_completed');
-        // firebase.performance(); // call to activate
-        //
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+    <div class="flex-container">
+        <div class="title">
+            <h1>Web Canvas</h1>
+        </div>
+        <div class="below">
+            <div class="main">
+                <div class="canvas-wrapper">
+                    <div class="canvas">
+                        <canvas id="savedpaper" width="600px" height="600px"></canvas>
+                        <canvas id="paper"      width="600px" height="600px"></canvas>
 
-        try {
-          let app = firebase.app();
-          let features = [
-            'auth', 
-            'database', 
-            'firestore',
-            'functions',
-            'messaging', 
-            'storage', 
-            'analytics', 
-            'remoteConfig',
-            'performance',
-          ].filter(feature => typeof app[feature] === 'function');
-          loadEl.textContent = `Firebase SDK loaded with ${features.join(', ')}`;
-        } catch (e) {
-          console.error(e);
-          loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
-        }
-      });
-    </script>
-  </body>
+                    </div>
+                </div>
+                <div class="toolbar">
+                    <div class="tool-line">
+                        <div class="item">
+                            <img class='tool' src="img/brush2.png" onclick="selectMode(this.id)" id="brush">
+                        </div>
+                        <div class="item">
+                            <div class="dropdown">
+                                <a href="#" id="menu1" data-toggle="dropdown" class="dropdown-toggle" data-offset="-50, 35" data-auto-close="inside" onclick="selectMode('erase_choose')">
+                                    <img src="img/eraser2.png" class="tool" id="erase_choose" >
+                                </a>
+                                <ul class="dropdown-menu horizontal" aria-labelledby="menu1">
+                                    <li>
+                                        <img class='tool' src="img/eraser2.png" onclick="selectMode(this.id)" id="erase">
+                                    </li>
+                                    <li>
+                                        <img class='tool' src="img/eraseArea2.png" onclick="selectMode(this.id)" id="eraseArea">
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <img class='tool' src="img/font2.png" onclick="selectMode(this.id)" id="font">
+                        </div>
+                    </div>
+                    <div class="tool-line">
+                        <div class="item">
+                            <img class='tool' src="img/rectangle2.png" onclick="selectMode(this.id)" id="rect">
+                        </div>
+                        <div class="item">
+                            <img class='tool' src="img/circle2.png" onclick="selectMode(this.id)" id="circle">
+                        </div>
+                        <div class="item">
+                            <img class='tool' src="img/triangle2.png" onclick="selectMode(this.id)" id="tri">
+                        </div>
+                    </div>
+
+                    <div class="selector">
+                        <div class="palette">
+                            <canvas id="palette-main" width="300px" height="300px"></canvas>
+                            <canvas id="palette-right" width="15px" height="300px"></canvas>
+                        </div>
+                        <div class="other-selector">
+                            <div class="fill-selector">
+                                <img src="img/circle2.png" width="50px" id="fillSelector" onclick="fillChange()">
+                            </div>
+                            <div class="width-selector">
+                                <input type="range" min="1" max="30" step="1" value="5" id="thickness">
+                            </div>
+                            <div class="font-selector">
+                                <select id="font-family" class="form-select-sm" aria-label="Default select example">
+                                    <option value="Arial">Arial</option>
+                                    <option value="Times New Roman">Times New Roman</option>
+                                    <option value="serif">serif</option>
+                                    <option value="Microsoft JhengHei">微軟正黑體</option>
+                                    <option value="PMingLiU">新細明體</option>
+                                    <option value="DFKai-SB">標楷體</option>
+                                </select>
+                                <select id="font-size" class="form-select-sm">
+                                    <option value="12">12px</option>
+                                    <option value="24">24px</option>
+                                    <option value="32">32px</option>
+                                    <option value="60">60px</option>
+                                    <option value="80">80px</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div> 
+                </div>
+            </div>
+            <div class="toolbar2">
+                <div class="item">
+                    <img src="img/reset.png" onclick="resetAll()">
+                </div>
+                <div class="item">
+                    <img src="img/download.png" onclick="download()">
+                </div>
+                <div class="item">
+                    <img src="img/upload.png" data-toggle="modal" data-target="#uploadModal">
+                </div>
+                <div class="item">
+                    <img src="img/undo.png" onclick="Undo()" id="undo" disabled="disabled">
+                </div>
+                <div class="item">
+                    <img src="img/redo.png" onclick="Redo()" id="redo" disabled="disabled">
+                </div>
+                <div class="item">
+                    <img src="img/rotL.png" onclick="rotateLeft('add')">
+                </div>
+                <div class="item">
+                    <img src="img/rotR.png" onclick="rotateRight('add')">
+                </div>
+                <div class="item">
+                    <img src="img/flip.png" onclick="flip('add')">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="palette.js"></script>
+    <script src="app.js"></script>
+</body>
 </html>
