@@ -485,7 +485,7 @@ canvas.addEventListener('mouseup', () => {
 changeCursor = () => {
     switch(selectedMode){ // cursor icon
         case 'brush':
-            document.getElementById('paper').style.cursor = "url('img/brush.png'), auto";
+            document.getElementById('paper').style.cursor = "url('img/brush.png') 0 27, auto";
             break;
         case 'erase':
             document.getElementById('erase_choose').src = "img/eraser2.png";

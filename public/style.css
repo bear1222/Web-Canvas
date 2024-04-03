@@ -63,7 +63,7 @@ body{
     left: 0px;
 }
 #paper{
-    cursor: url('img/brush.png'), auto;
+    cursor: url('img/brush.png') 0 27, auto;
 }
 
 .toolbar{
