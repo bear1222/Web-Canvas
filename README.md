@@ -32,36 +32,36 @@
 Simply click on corresponding image and draw on the canvas!
 
 Brush:
-![](./img/brush2.png)
+![](./public/img/brush2.png)
 Eraser:
-![](./img/eraser2.png)
+![](./public/img/eraser2.png)
 Font:
-![](./img/font2.png)
+![](./public/img/font2.png)
 
 Rectangle:
-![](./img/rectangle2.png)
+![](./public/img/rectangle2.png)
 Circle:
-![](./img/circle2.png)
+![](./public/img/circle2.png)
 Triangle:
-![](./img/triangle2.png)
+![](./public/img/triangle2.png)
 
 Choose color:
-![Alt text](image-1.png)  
+![Alt text](./readme_img/image.png)  
 Choose line width:
-![Alt text](image-2.png)  
+![Alt text](./readme_img/image1.png)  
 Choose font family and size:
-![Alt text](image.png)
+![Alt text](./readme_img/image-1.png)  
 
 Reset:
-![](./img/reset.png)
+![](./public/img/reset.png)
 Download:
-![](./img/download.png)
+![](./public/img/download.png)
 Upload:
-![](./img/upload.png)
+![](./public/img/upload.png)
 Undo:
-![](./img/undo.png)
+![](./public/img/undo.png)
 Redo:
-![](./img/redo.png)
+![](./public/img/redo.png)
 
 
 
@@ -69,29 +69,30 @@ Redo:
 ### Bonus Function description
 
 * change filled shape and stroked shape  
-    ![Alt text](image-4.png)  
+    ![Alt text](./readme_img/image-2.png)  
     When click on the circle, we can change the shapes into filled ones.  
     ex.  
-    ![Alt text](image-5.png)
-    ![Alt text](image-6.png)
+    ![Alt text](./readme_img/image-3.png)   
+    ![Alt text](./readme_img/image-4.png)   
 * erase rectangle area  
     when click on the eraser image, a dropdown menu will appear like this:  
-    ![Alt text](image-7.png)  
+    ![Alt text](./readme_img/image-5.png)   
     the right one is to erase an rectangle area.   
     (After clicking it, the screen original eraser icon would be replaced like this)
-    ![Alt text](image-8.png)
+    ![Alt text](./readme_img/image-6.png)   
 * rotate canvas  
     click on this then the canvas will rotate 90 degree.    
-    ![Alt text](image-9.png)  
+    ![Alt text](./readme_img/image-7.png)   
     (the left is counter-clockwise, right one is clockwise)
     ex.  
-    ![Alt text](image-10.png)  
-    ![Alt text](image-12.png)
+    ![Alt text](./readme_img/image-9.png)  
+    ![Alt text](./readme_img/image-11.png)  
 * flip canvas
     click on this then the canvas will be flipped.    
+    ![Alt text](./readme_img/image-8.png)  
     ex.  
-    ![Alt text](image-10.png)  
-    ![Alt text](image-11.png)
+    ![Alt text](./readme_img/image-9.png)  
+    ![Alt text](./readme_img/image-10.png)
 
 
 
