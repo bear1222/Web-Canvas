@@ -47,6 +47,7 @@ var record = {
     reset: function(){
         this.now = -1;
         this.records = [];
+        checkUndoRedo();
     }, 
     addRecord: function(rec){
         console.log(rec);
